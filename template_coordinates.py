@@ -859,15 +859,6 @@ TEMPLATE_COORDINATES = {
             (843, 574),
         ]
     },
-    "Pakenham - 38102-D.png": {
-        "split_ratio": [1.0],
-        "LHS": [
-            (1442, 595),
-            (2241, 615),
-            (2234, 845),
-            (1437, 837),
-        ]
-    },
     "Port Macquarie (Digital) - 24445-D.png": {
         "split_ratio": [1.0],
         "LHS": [
