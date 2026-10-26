@@ -25,7 +25,7 @@ from typing import Dict, List, Optional, Tuple
 import requests
 
 GITHUB_API = "https://api.github.com"
-REPO = "phoebegawk/mockup-machine"
+REPO = "taradwayne/mockup-machine"
 BRANCH = "main"
 COORDS_PATH = "template_coordinates.py"
 TEMPLATE_DIR_PATH = "Templates/Digital"
