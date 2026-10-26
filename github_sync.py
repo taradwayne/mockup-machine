@@ -120,7 +120,7 @@ def commit_site(filename: str, quad: list, png_bytes: bytes) -> None:
 
     source_text, coords_sha = _get_file(COORDS_PATH)
     if source_text is None:
-        raise RuntimeError(f"Could not read {COORDS_PATH} from {}@{BRANCH}.")
+        raise RuntimeError(f"Could not read {COORDS_PATH} from {REPO}@{BRANCH}.")
 
     entry_text = format_entry(filename, quad)
     new_source = insert_entry(source_text, entry_text)
