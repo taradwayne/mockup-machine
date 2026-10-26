@@ -5,7 +5,7 @@ via the admin "Add Site" dialog survive Render redeploys instead of only
 living in the current ephemeral container.
 
 Requires a GITHUB_TOKEN environment variable — a fine-grained PAT scoped to
-Contents: Read and write on this repo only, tied to whichever GitHub account
+Contents: Read and write on this  only, tied to whichever GitHub account
 should legitimately own commits to this repo (confirm this has been moved
 off any legacy personal-account credential before relying on this).
 
@@ -120,7 +120,7 @@ def commit_site(filename: str, quad: list, png_bytes: bytes) -> None:
 
     source_text, coords_sha = _get_file(COORDS_PATH)
     if source_text is None:
-        raise RuntimeError(f"Could not read {COORDS_PATH} from {REPO}@{BRANCH}.")
+        raise RuntimeError(f"Could not read {COORDS_PATH} from {}@{BRANCH}.")
 
     entry_text = format_entry(filename, quad)
     new_source = insert_entry(source_text, entry_text)
