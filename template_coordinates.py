@@ -904,24 +904,6 @@ TEMPLATE_COORDINATES = {
             (1548, 1266),
         ]
     },
-    "Albury South - 36908-D (Mock-Up).png": {
-        "split_ratio": [1.0],
-        "LHS": [
-            (2141, 964),
-            (2913, 958),
-            (2913, 1182),
-            (2142, 1185),
-        ]
-    },
-    "Albury South - 36908-D.png": {
-        "split_ratio": [1.0],
-        "LHS": [
-            (2141, 964),
-            (2913, 958),
-            (2913, 1182),
-            (2142, 1185),
-        ]
-    },
     "Albury South (Digital) - 36908-D.png": {
         "split_ratio": [1.0],
         "LHS": [
