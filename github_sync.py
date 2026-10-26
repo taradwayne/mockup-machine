@@ -137,3 +137,92 @@ def commit_site(filename: str, quad: list, png_bytes: bytes) -> None:
         message=f"Add coordinates for {filename}",
         sha=coords_sha,
     )
+
+
+
+def _remove_coordinate_entry(source_text: str, filename: str) -> str:
+    """Remove one template's coordinates without affecting other sites."""
+    tree = ast.parse(source_text)
+    lines = source_text.splitlines(keepends=True)
+
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+
+        if not any(
+            isinstance(target, ast.Name)
+            and target.id == "TEMPLATE_COORDINATES"
+            for target in node.targets
+        ):
+            continue
+
+        if not isinstance(node.value, ast.Dict):
+            break
+
+        for key, value in zip(node.value.keys, node.value.values):
+            if (
+                isinstance(key, ast.Constant)
+                and key.value == filename
+            ):
+                start = key.lineno - 1
+                end = value.end_lineno
+                updated = "".join(lines[:start] + lines[end:])
+                ast.parse(updated)
+                return updated
+
+    raise ValueError(f"Coordinates for '{filename}' were not found.")
+
+
+def delete_site(filename: str) -> None:
+    """Permanently remove a template and its coordinates from GitHub."""
+    if not is_configured():
+        raise RuntimeError("GITHUB_TOKEN is not configured.")
+
+    if (
+        not filename
+        or filename != os.path.basename(filename)
+        or not filename.lower().endswith(".png")
+    ):
+        raise ValueError("Invalid template filename.")
+
+    source_text, coords_sha = _get_file(COORDS_PATH)
+    if source_text is None:
+        raise RuntimeError("Could not load template coordinates.")
+
+    updated_source = _remove_coordinate_entry(
+        source_text, filename
+    )
+
+    image_path = f"{TEMPLATE_DIR_PATH}/{filename}"
+    image_url = f"{GITHUB_API}/repos/{REPO}/contents/{image_path}"
+
+    response = requests.get(
+        image_url,
+        headers=_headers(),
+        params={"ref": BRANCH},
+        timeout=_TIMEOUT,
+    )
+    response.raise_for_status()
+    image_sha = response.json()["sha"]
+
+    # Delete the image from GitHub
+    response = requests.delete(
+        image_url,
+        headers=_headers(),
+        json={
+            "message": f"Delete site template: {filename}",
+            "sha": image_sha,
+            "branch": BRANCH,
+        },
+        timeout=_TIMEOUT,
+    )
+    response.raise_for_status()
+
+    # Remove its coordinates
+    _put_file(
+        COORDS_PATH,
+        updated_source.encode("utf-8"),
+        message=f"Remove coordinates for {filename}",
+        sha=coords_sha,
+    )
+
